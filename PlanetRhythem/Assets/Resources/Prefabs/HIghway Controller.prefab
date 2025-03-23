@@ -159,7 +159,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3741077475602470701}
-  - component: {fileID: 3037913275409593128}
+  - component: {fileID: 366818942548292462}
   m_Layer: 0
   m_Name: HIghway Controller
   m_TagString: Untagged
@@ -184,7 +184,7 @@ Transform:
   - {fileID: 8567839411751703346}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3037913275409593128
+--- !u!114 &366818942548292462
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6506939157310045876}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e33de11ce66241a43b19494b0fda7511, type: 3}
+  m_Script: {fileID: 11500000, guid: f52f1e41ee568a24781e6cc86e15a037, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timePerSong: 0
@@ -201,8 +201,20 @@ MonoBehaviour:
   timePerBeat: 0
   timePerNote: 0
   notePrefab: {fileID: 9090144462337807331, guid: a8c17d403e62b0148ad1bebc0e93204a, type: 3}
-  activeNoteLimit: 75
+  activeNoteLimit: 200
   measuresPerRotation: 8
   failTime: 1.5
   ringPivot: {fileID: 0}
   notesSpawnStart: {fileID: 6139455081395597923}
+  OnSongStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSongEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSongWon:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSongFailed:
+    m_PersistentCalls:
+      m_Calls: []

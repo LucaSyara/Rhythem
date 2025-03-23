@@ -428,6 +428,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 366818942548292462, guid: bce5b0b73e8cdc342aff5f06dec20bf8, type: 3}
+      propertyPath: ringPivot
+      value: 
+      objectReference: {fileID: 3558292650566069748}
     - target: {fileID: 3037913275409593128, guid: bce5b0b73e8cdc342aff5f06dec20bf8, type: 3}
       propertyPath: ringPivot
       value: 

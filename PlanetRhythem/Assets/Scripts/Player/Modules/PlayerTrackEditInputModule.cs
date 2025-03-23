@@ -4,9 +4,17 @@ using UnityEngine.InputSystem;
 namespace Rhythem.Play {
     public class PlayerTrackEditInputModule : InputModule
     {
+        private PlayerWand _leftHand;
+        private PlayerWand _rightHand;
+        private Vector2 _directionLeft;
+        private Vector2 _directionRight;
+
         protected override void Start()
         {
             base.Start();
+            var gm = GameManager.Instance;
+            _leftHand = gm.player.leftHand;
+            _rightHand = gm.player.rightHand;
         }
 
         protected override void OnDestroy()
@@ -29,9 +37,14 @@ namespace Rhythem.Play {
             base.Update();
         }
 
-        protected override void OnConfirmPerformed(InputAction.CallbackContext context)
+        protected virtual void OnConfirmLeftPerformed(InputAction.CallbackContext context)
         {
-            base.OnConfirmPerformed(context);
+            _leftHand.DoNoteCreate(DesiredHand.Left, _directionLeft);
+        }
+
+        protected virtual void OnConfirmRightPerformed(InputAction.CallbackContext context)
+        {
+            _rightHand.DoNoteCreate(DesiredHand.Right, _directionRight);
         }
 
         protected override void OnBackPerformed(InputAction.CallbackContext context)
@@ -45,24 +58,49 @@ namespace Rhythem.Play {
             base.OnPausePerformed(context);
         }
 
-        protected override void OnSelectionChangePerformed(InputAction.CallbackContext context)
+        protected virtual void OnSelectionChangeLeftPerformed(InputAction.CallbackContext context)
         {
-            //base.OnSelectionChangePerformed(context);
-            var dir = controls.Player.ChangeSelection.ReadValue<Vector2>();
+            var dir = controls.SongEditor.ChangeNoteTypeLeft.ReadValue<Vector2>();
             if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
             {
-
+                dir.y = 0f;
             }
+            dir.x = Mathf.Ceil(dir.x);
+            dir.y = Mathf.Ceil(dir.y);
+            _directionLeft = dir;
+        }
+
+        protected virtual void OnSelectionChangeRightPerformed(InputAction.CallbackContext context)
+        {
+            var dir = controls.SongEditor.ChangeNoteTypeRight.ReadValue<Vector2>();
+            if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+            {
+                dir.y = 0f;
+            }
+            dir.x = Mathf.Ceil(dir.x);
+            dir.y = Mathf.Ceil(dir.y);
+            _directionRight = dir;
         }
 
         protected override void SubscribeToControls()
         {
-            base.SubscribeToControls();
+            controls.SongEditor.CommitNoteLeft.performed += OnConfirmLeftPerformed;
+            controls.SongEditor.CommitNoteRight.performed += OnConfirmRightPerformed;
+            controls.SongEditor.Back.performed += OnBackPerformed;
+            controls.SongEditor.Pause.performed += OnPausePerformed;
+            controls.SongEditor.ChangeNoteTypeLeft.performed += OnSelectionChangeLeftPerformed;
+            controls.SongEditor.ChangeNoteTypeRight.performed += OnSelectionChangeRightPerformed;
         }
+            
 
         protected override void UnsubscribeToControls()
         {
-            base.UnsubscribeToControls();
+            controls.SongEditor.CommitNoteLeft.performed -= OnConfirmLeftPerformed;
+            controls.SongEditor.CommitNoteRight.performed -= OnConfirmRightPerformed;
+            controls.SongEditor.Back.performed -= OnBackPerformed;
+            controls.SongEditor.Pause.performed -= OnPausePerformed;
+            controls.SongEditor.ChangeNoteTypeLeft.performed -= OnSelectionChangeLeftPerformed;
+            controls.SongEditor.ChangeNoteTypeRight.performed -= OnSelectionChangeRightPerformed;
         }
     }
 }

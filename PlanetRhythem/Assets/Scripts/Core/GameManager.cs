@@ -4,7 +4,6 @@ using System;
 using Unity.XR.CoreUtils;
 using Rhythem.TrackEditor;
 using Sirenix.OdinInspector;
-using UnityEngine.Rendering;
 
 namespace Rhythem
 {
@@ -19,8 +18,7 @@ namespace Rhythem
 
 
         [Title("Assignables")]
-        [SerializeField] public GameObject playerPrefab;
-        private GameObject playerObjectInstance;
+        public GameObject playerPrefab;
         public bool showDebugLogs = true;
         public XROrigin VRRig { get; private set; }
         public Play.Player player { get; private set; }
@@ -28,7 +26,9 @@ namespace Rhythem
         public Action<bool> onPaused;
 
         public SongScoringProfile scoreProfile;
+
         private Beatmap _currentBeatmap;
+        private GameObject playerObjectInstance;
 
         //this should only ever be assigned in a Menu Session
         public Beatmap CurrentBeatmap

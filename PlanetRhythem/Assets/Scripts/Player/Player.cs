@@ -1,12 +1,10 @@
 using Rhythem.Core;
 using Rhythem.Songs;
 using Sirenix.OdinInspector;
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.SpatialTracking;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace Rhythem.Play
 {
@@ -43,10 +41,26 @@ namespace Rhythem.Play
             _inputModule.leftHand = leftHand;
         }
 
+        public T GetInputModule<T>() where T: InputModule
+        {
+                return (T)_inputModule;
+        }
+
+        public InputModule GetInputModule()
+        {
+            return _inputModule;
+        }
+
         void Start()
         {
-            leftHand.OnNoteHit.AddListener(OnHitNoteAction);
-            rightHand.OnNoteHit.AddListener(OnHitNoteAction);
+            if (SessionsManager.Instance.GetCurrentSession<SongSession>() != null)
+            {
+                DoSongStartPlayerSetup();
+            }
+            else if (SessionsManager.Instance.GetCurrentSession<EditorSession>() != null)
+            {
+                DoEditStartPlayerSetup();
+            }
         }
 
         void Update()
@@ -54,7 +68,13 @@ namespace Rhythem.Play
 
         }
 
-        public void DoSongStartPlayerSetup()
+        private void DoSongStartPlayerSetup()
+        {
+            leftHand.OnNoteHit.AddListener(OnHitNoteAction);
+            rightHand.OnNoteHit.AddListener(OnHitNoteAction);
+        }
+
+        private void DoEditStartPlayerSetup()
         {
 
         }
@@ -107,8 +127,7 @@ namespace Rhythem.Play
 
             }
         }
-
-        
+   
         public void OnMissedNoteAction(ScorableNote note)
         {
             songSession.AddToEnergy(GameManager.Instance.scoreProfile.energyLossFromMiss);

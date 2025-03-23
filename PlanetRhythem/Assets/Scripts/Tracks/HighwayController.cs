@@ -8,14 +8,9 @@ using System.Collections;
 
 namespace Rhythem.Tracks
 {
-    public class HighwayController : MonoBehaviour
+    public abstract class HighwayController : MonoBehaviour
     {
         public static HighwayController s;
-        [Title("Testing Fields")]
-        [SerializeField] private float timePerSong = 0f;
-        [SerializeField] private float timePerMeasure = 0f;
-        [SerializeField] private float timePerBeat = 0f;
-        [SerializeField] private float timePerNote = 0f;
 
         [Title("Notes Setup")]
         public GameObject notePrefab;
@@ -29,29 +24,29 @@ namespace Rhythem.Tracks
         public UnityEvent OnSongEnded;
         public UnityEvent OnSongWon;
         public UnityEvent OnSongFailed;
-        private IEnumerator _songStartAsync;
+        protected IEnumerator _songStartAsync;
 
-        private Player player;
-        private NoteManager _noteManager;
-        private AudioManager audioManager;
-        private Beatmap _beatmap;
-        private Song _song;
+        protected Player player;
+        protected NoteManager _noteManager;
+        protected AudioManager audioManager;
+        protected Beatmap _beatmap;
+        protected Song _song;
 
 
-        void Awake()
+        protected virtual void Awake()
         {
             audioManager = AudioManager.Instance;
             //songSession = SessionsManager.Instance.GetCurrentSession<SongSession>();
 
             if(s != null)
             {
-                Debug.LogError("Error: More than 1 Highway Controller in scene");
-                return;
+                Destroy(s);
+                s = null;
             }
             s = this;
         }
 
-        void Start()
+        protected virtual void Start()
         {
             if (_noteManager == null)
             {
@@ -59,93 +54,42 @@ namespace Rhythem.Tracks
             }
             SetupSong();
 
-            timePerSong = _beatmap.audioFile.length - _beatmap.silenceAtStartOfTrack;
-            timePerMeasure = timePerSong / _beatmap.bPM / 60f;
-            timePerBeat = timePerMeasure / _beatmap.beatsPerMeasure;
-            timePerNote = timePerBeat / _beatmap.subdivisionsPerBeat;
-
             player = GameManager.Instance.player;
 
             SubscribeToSongSessionActions();
             
         }
-        public void SubscribeToSongSessionActions()
+        public virtual void SubscribeToSongSessionActions()
         {
-            player.leftHand.OnNoteHit.AddListener(DoNoteHit);
-            player.rightHand.OnNoteHit.AddListener(DoNoteHit);
-            _noteManager.deadzoneController.OnNoteMissed.AddListener(player.OnMissedNoteAction);
+
         }
 
-        public void UnsubscribeToSongSessionActions()
+        public virtual void UnsubscribeToSongSessionActions()
         {
-            player.leftHand.OnNoteHit.RemoveListener(DoNoteHit);
-            player.rightHand.OnNoteHit.RemoveListener(DoNoteHit);
-            _noteManager.deadzoneController.OnNoteMissed.RemoveListener(player.OnMissedNoteAction);
+
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             UnsubscribeToSongSessionActions();
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             UnsubscribeToSongSessionActions();
         }
 
-        void Update()
+        protected virtual void Update()
         {
-            if (SessionsManager.Instance.GetCurrentSession<SongSession>().IsSongFailed())
-            {
-                DoSongFail();
-            }
+
         }
 
-        void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             UpdateRing();
         }
 
-        public void DoNoteHit(DesiredHand hand, ScorableNote note, ScoreZone scoreZone)
-        {
-            Debug.Log(scoreZone.ToString());
-
-            if (scoreZone == ScoreZone.Miss)
-            {
-                _noteManager.deadzoneController.OnNoteMissed.Invoke(note);
-            }
-        }
-
-        public void DoSongWin()
-        {
-            OnSongWon.Invoke();
-            StartCoroutine(SongWin());
-        }
-
-        public void DoSongFail()
-        {
-            OnSongFailed.Invoke();
-            //StartCoroutine(SongFail());
-        }
-
-        public IEnumerator SongWin()
-        {
-            audioManager.PlayOneShot(audioManager.songCompleteSFXEvent, Camera.main.transform.position);
-            //YOU WIN MENU
-            yield return null;
-        }
-
-        public IEnumerator SongFail()
-        {
-            //slow the highway down over time and the music to match
-            //fade to black, load song end scene
-            audioManager.activeSong.setParameterByName("Song failed", 1f);
-            audioManager.PlayOneShot(audioManager.songFailSFXEvent, player.head.transform.position);
-            yield return new WaitForSeconds(failTime);
-            //YOU FAILED MENU
-        }
-
-        public void SetupSong()
+        public virtual void SetupSong()
         {
             var sm = SessionsManager.Instance.GetCurrentSession<SongSession>();
             _beatmap = sm.beatmap;
@@ -159,7 +103,7 @@ namespace Rhythem.Tracks
             StartCoroutine(_songStartAsync);
         }
 
-        void UpdateRing()
+        protected virtual void UpdateRing()
         {
             if (ringPivot == null && (ringPivot = GameObject.Find("Ring").transform) == null)
             {
@@ -168,7 +112,7 @@ namespace Rhythem.Tracks
             ringPivot.Rotate(new Vector3(0, (_song.bpm / 60f) * 360f / _song.beatsPerMeasure / measuresPerRotation * Time.fixedDeltaTime, 0));
         }
 
-        IEnumerator DoSongStartWithDelay(AudioClip songFile)
+        protected virtual IEnumerator DoSongStartWithDelay(AudioClip songFile)
         {
             if (songFile == null)
             {

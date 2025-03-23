@@ -1,4 +1,3 @@
-using Rhythem.Core;
 using Rhythem.Songs;
 using UnityEngine;
 using UnityEngine.Events;

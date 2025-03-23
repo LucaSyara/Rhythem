@@ -1,13 +1,14 @@
 using Rhythem.Play;
+using Rhythem.Songs;
 using Rhythem.TrackEditor;
-using UnityEngine;
 
 namespace Rhythem
 {
     public class EditorSession : Session
     {
         public Beatmap editorBeatmap;
-        
+        public Song song;
+
         public override void Initialize()
         {
             base.Initialize();

@@ -5,9 +5,6 @@ namespace Rhythem.Play
 {
     public class PlayerSongPlayInputModule : InputModule
     {
-
-
-
         protected override void Start()
         {
             base.Start();

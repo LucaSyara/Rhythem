@@ -125,9 +125,18 @@
             "id": "7004c43a-a7c8-4d83-a40b-a0c3ba7bf41d",
             "actions": [
                 {
-                    "name": "CommitNote",
+                    "name": "CommitNoteLeft",
                     "type": "Button",
                     "id": "08ab9243-76d0-4301-a99b-64383a80dd7b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CommitNoteRight",
+                    "type": "Button",
+                    "id": "77d348a6-c3e6-485c-b8b0-233c9ab60306",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -161,9 +170,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeNoteType",
+                    "name": "ChangeNoteTypeLeft",
                     "type": "Value",
                     "id": "a11fda66-48ad-4169-b054-83f741f5b511",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ChangeNoteTypeRight",
+                    "type": "Value",
+                    "id": "6a30d1b0-8586-46bc-9d77-800fd4e1eefe",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -174,11 +192,22 @@
                 {
                     "name": "",
                     "id": "22484710-64ec-4ec2-834b-0b69b2d3d594",
-                    "path": "<XRController>/{TriggerButton}",
+                    "path": "<XRController>{LeftHand}/{TriggerButton}",
                     "interactions": "",
                     "processors": "",
                     "groups": ";XR;Touch",
-                    "action": "CommitNote",
+                    "action": "CommitNoteLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9d961c18-7c18-4658-a9b9-c0ebdf858c18",
+                    "path": "<XRController>{RightHand}/{TriggerButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";XR;Touch",
+                    "action": "CommitNoteRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -218,22 +247,44 @@
                 {
                     "name": "",
                     "id": "d4dd3aca-11a0-4619-aefd-7b7764443887",
-                    "path": "<XRController>/{Primary2DAxis}",
+                    "path": "<XRController>{LeftHand}/{Primary2DAxis}",
                     "interactions": "",
                     "processors": "",
                     "groups": ";XR",
-                    "action": "ChangeNoteType",
+                    "action": "ChangeNoteTypeLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "1c1d9e41-6997-43a6-a5f7-6a66e69a5bcd",
-                    "path": "<XRController>/{Secondary2DAxis}",
+                    "path": "<XRController>{LeftHand}/{Secondary2DAxis}",
                     "interactions": "",
                     "processors": "",
                     "groups": ";XR",
-                    "action": "ChangeNoteType",
+                    "action": "ChangeNoteTypeLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "01251f53-7f81-466a-ad26-76397846c3f9",
+                    "path": "<XRController>{RightHand}/{Primary2DAxis}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";XR",
+                    "action": "ChangeNoteTypeRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "450f9b78-7b7e-44f4-8dbc-8aff7e1a9311",
+                    "path": "<XRController>{RightHand}/{Secondary2DAxis}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";XR",
+                    "action": "ChangeNoteTypeRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

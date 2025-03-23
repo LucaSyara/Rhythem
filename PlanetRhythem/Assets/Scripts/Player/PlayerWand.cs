@@ -11,15 +11,17 @@ namespace Rhythem.Play
     {
 
         public DesiredHand desiredHand;
+        public Transform _wandBubbleCenterTransform;
         public Transform lineRenderStartTransform;
         public ParticleSystem galaxyTrail;
         public bool inMenuMode = true;
 
         private Color _handColor;
-
-
+        private bool _inEditorMode = false;
         private LineRenderer _selectionAssistant;
+
         public UnityEvent<DesiredHand, ScorableNote, ScoreZone> OnNoteHit;
+        public UnityEvent<ScorableNote, Vector2> OnNoteCreated;
 
         void Start()
         {
@@ -40,8 +42,36 @@ namespace Rhythem.Play
             }
         }
 
+        public void DoNoteCreate(DesiredHand hand, Vector2 noteTypeDirection)
+        {
+            if (!_inEditorMode)
+            {
+                return;
+            }
+            ScorableNote newNote = new ScorableNote();
+            newNote.noteHand = hand;
+            NoteType newNoteType = new NoteType();
+            if (noteTypeDirection == Vector2.zero)
+            {
+                newNoteType = NoteType.Note;
+            }
+            else if (noteTypeDirection.y > 0f)
+            {
+                newNoteType = NoteType.Obstacle;
+            }
+            //can add more note types here if wanted
+            newNote.noteType = newNoteType;
+            Vector3 pos = gameObject.transform.position;
+            OnNoteCreated.Invoke(newNote, pos);
+        }
+
         private void OnTriggerEnter(Collider other)
         {
+            if (_inEditorMode)
+            {
+                return;
+            }
+
             if (other.tag == "Note")
             {
                 var note = other.GetComponent<ScorableNote>();

@@ -7,5 +7,14 @@ namespace Rhythem.Songs
     public class Measure
     {
         [SerializeField] public List<Beat> beats = new();
+        public Beat GetBeatAt(int index)
+        {
+            if (beats.Count > index)
+            {
+                return beats[index];
+            }
+            return null;
+        }
     }
+
 }

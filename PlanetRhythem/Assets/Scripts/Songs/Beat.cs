@@ -7,5 +7,13 @@ namespace Rhythem.Songs
     public class Beat
     {
         [SerializeField]public List<Note> notes = new();
+        public Note GetNoteAt(int index)
+        {
+            if (notes.Count > index)
+            {
+                return notes[index];
+            }
+            return null;
+        }
     }
 }

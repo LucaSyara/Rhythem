@@ -1,9 +1,7 @@
 using Rhythem.Play;
 using Rhythem.Songs;
 using Rhythem.TrackEditor;
-using Rhythem.Tracks;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Rhythem
 {
@@ -49,12 +47,20 @@ namespace Rhythem
             {
                 score = 0;
             }
+            if (GameManager.Instance.showDebugLogs)
+            {
+                Debug.Log($"points {points}: {score}");
+            }
         }
 
         public void AddToEnergy(int changeAmount)
         {
             energy += changeAmount;
             Mathf.Clamp(energy, 0, GameManager.Instance.scoreProfile.energyStartValue);
+            if (GameManager.Instance.showDebugLogs)
+            {
+                Debug.Log($"Energy {changeAmount}: {energy}");
+            }
         }
 
         public bool IsSongFailed()
